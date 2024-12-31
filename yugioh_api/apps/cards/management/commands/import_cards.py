@@ -31,8 +31,8 @@ class Command(BaseCommand):
                 defaults={
                     'typeline': card_data.get('typeline', []),
                     'type': card_data.get('type', ''),
-                    'human_readable_card_type': card_data.get('humanReadableCardType', ''),
-                    'frame_type': card_data.get('frameType', ''),
+                    'humanReadableCardType': card_data.get('humanReadableCardType', ''),
+                    'frameType': card_data.get('frameType', ''),
                     'desc': card_data.get('desc', ''),
                     'race': card_data.get('race', ''),
                     'atk': atk,

@@ -1,0 +1,52 @@
+{
+    "id": 47897376,
+    "name": "Adamancipator Crystal - Leonite",
+    "typeline": [
+        "Rock",
+        "Effect"
+    ],
+    "type": "Effect Monster",
+    "humanReadableCardType": "Effect Monster",
+    "frameType": "effect",
+    "desc": "If this card is Special Summoned by the effect of an \"Adamancipator\" card: You can place 1 \"Adamancipator\" card from your hand or GY on top of the Deck. If this card is in your GY: You can target 1 FIRE Synchro Monster you control or in your GY; return it to the Extra Deck, and if you do, place this card on top of the Deck. You can only use each effect of \"Adamancipator Crystal - Leonite\" once per turn.",
+    "race": "Rock",
+    "atk": 0,
+    "def": 2200,
+    "level": 4,
+    "attribute": "FIRE",
+    "archetype": "Adamancipator",
+    "ygoprodeck_url": "https://ygoprodeck.com/card/adamancipator-crystal-leonite-10865",
+    "card_sets": [
+        {
+            "set_name": "2021 Tin of Ancient Battles",
+            "set_code": "MP21-EN227",
+            "set_rarity": "Common",
+            "set_rarity_code": "(C)",
+            "set_price": "0.87"
+        },
+        {
+            "set_name": "Secret Slayers",
+            "set_code": "SESL-EN004",
+            "set_rarity": "Super Rare",
+            "set_rarity_code": "(SR)",
+            "set_price": "0"
+        }
+    ],
+    "card_images": [
+        {
+            "id": 47897376,
+            "image_url": "https://images.ygoprodeck.com/images/cards/47897376.jpg",
+            "image_url_small": "https://images.ygoprodeck.com/images/cards_small/47897376.jpg",
+            "image_url_cropped": "https://images.ygoprodeck.com/images/cards_cropped/47897376.jpg"
+        }
+    ],
+    "card_prices": [
+        {
+            "cardmarket_price": "0.07",
+            "tcgplayer_price": "0.08",
+            "ebay_price": "0.99",
+            "amazon_price": "0.49",
+            "coolstuffinc_price": "0.25"
+        }
+    ]
+}
