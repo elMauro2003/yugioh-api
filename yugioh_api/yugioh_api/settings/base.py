@@ -23,6 +23,7 @@ BASE_APPS = [
 
 LOCAL_APPS = [
     'apps.users',
+    'apps.cards',
 ]
 
 THIRD_APPS = [
@@ -60,6 +61,11 @@ TEMPLATES = [
         },
     },
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'apps.cards.api.pagination.CardPagination',
+    'PAGE_SIZE': 10,
+}
 
 WSGI_APPLICATION = 'yugioh_api.wsgi.application'
 
