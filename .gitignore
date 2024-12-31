@@ -9,7 +9,7 @@
 __pycache__
 .vscode/
 .env
-#db.sqlite3
+db.sqlite3
 
 
 #0*.py
@@ -132,3 +132,4 @@ development.py
 # myfiles
 fillDataBase1.json
 fillDataBase2.json
+yugioh_api.code-workspace
