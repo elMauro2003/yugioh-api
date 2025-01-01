@@ -25,6 +25,9 @@ class Command(BaseCommand):
             defense = card_data.get('def', None)
             linkval = card_data.get('linkval', None)
             linkmarkers = card_data.get('linkmarkers', [])
+            pend_desc = card_data.get('pend_desc', None)
+            monster_desc = card_data.get('monster_desc', None)
+            scale = card_data.get('scale', None)
 
             card, created = Card.objects.get_or_create(
                 name=card_data['name'],
@@ -42,7 +45,10 @@ class Command(BaseCommand):
                     'archetype': card_data.get('archetype', None),
                     'linkval': linkval,
                     'linkmarkers': linkmarkers,
-                    'ygoprodeck_url': card_data.get('ygoprodeck_url', '')
+                    'ygoprodeck_url': card_data.get('ygoprodeck_url', ''),
+                    'pend_desc': pend_desc,
+                    'monster_desc': monster_desc,
+                    'scale': scale
                 }
             )
 

@@ -130,7 +130,7 @@ development.py
 
 
 # myfiles
-#data.json
+data.json
 fillDataBase1.json
 fillDataBase2.json
 yugioh_api.code-workspace

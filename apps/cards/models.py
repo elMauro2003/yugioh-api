@@ -25,7 +25,6 @@ class CardPrice(models.Model):
     coolstuffinc_price = models.DecimalField(max_digits=10, decimal_places=2)
 
 class Card(models.Model):
-    id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=255)
     typeline = models.JSONField(null=True, blank=True)
     type = models.CharField(max_length=255)
@@ -33,11 +32,14 @@ class Card(models.Model):
     frameType = models.CharField(max_length=255)
     desc = models.TextField()
     race = models.CharField(max_length=255)
+    pend_desc = models.TextField(null=True, blank=True)
+    monster_desc = models.TextField(null=True, blank=True)
     atk = models.IntegerField(null=True, blank=True)
     defense = models.IntegerField(null=True, blank=True)
     level = models.IntegerField(null=True, blank=True)
     attribute = models.CharField(null=True, blank=True, max_length=255)
     archetype = models.CharField(max_length=255, null=True, blank=True)
+    scale = models.IntegerField(null=True, blank=True)
     linkval = models.IntegerField(null=True, blank=True)
     linkmarkers = models.JSONField(null=True, blank=True)
     ygoprodeck_url = models.URLField()

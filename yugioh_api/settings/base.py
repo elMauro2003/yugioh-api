@@ -29,6 +29,7 @@ LOCAL_APPS = [
 THIRD_APPS = [
     'rest_framework',
     'simple_history',
+    'django_filters',
 ]
 
 INSTALLED_APPS = BASE_APPS + LOCAL_APPS + THIRD_APPS
@@ -65,6 +66,10 @@ TEMPLATES = [
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'apps.cards.api.pagination.CardPagination',
     'PAGE_SIZE': 10,
+    
+    'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend',
+    ),
 }
 
 WSGI_APPLICATION = 'yugioh_api.wsgi.application'

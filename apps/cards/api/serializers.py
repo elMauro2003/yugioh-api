@@ -33,12 +33,12 @@ class CardSerializer(serializers.ModelSerializer):
         card_prices_data = validated_data.pop('card_prices', [])
         
         # Manejar el campo id opcionalmente
-        card_id = validated_data.pop('id', None)
-        if card_id and not Card.objects.filter(id=card_id).exists():
-            card = Card(id=card_id, **validated_data)
-            card.save(force_insert=True)
-        else:
-            card = Card.objects.create(**validated_data)
+        #card_id = validated_data.pop('id', None)
+        #if card_id and not Card.objects.filter(id=card_id).exists():
+            #card = Card(id=card_id, **validated_data)
+            #card.save(force_insert=True)
+        #else:
+            #card = Card.objects.create(**validated_data)
         
         # Crear instancias de CardSet y agregarlas a la relación ManyToMany
         card_sets = []
