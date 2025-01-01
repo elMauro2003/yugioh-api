@@ -25,6 +25,7 @@ class CardPrice(models.Model):
     coolstuffinc_price = models.DecimalField(max_digits=10, decimal_places=2)
 
 class Card(models.Model):
+    konami_id = models.CharField(null=False, blank=False, default='0', max_length=8)
     name = models.CharField(max_length=255)
     typeline = models.JSONField(null=True, blank=True)
     type = models.CharField(max_length=255)

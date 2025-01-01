@@ -1,8 +1,15 @@
 import json
 import os
+import requests
 from django.core.management.base import BaseCommand
 from apps.cards.models import Card, CardSet, CardImage, CardPrice
 from django.db.utils import IntegrityError
+from termcolor import colored
+from colorama import init
+from tqdm import tqdm
+
+# Inicializar colorama
+init()
 
 class Command(BaseCommand):
     help = 'Import Yu-Gi-Oh cards from a JSON file'
@@ -13,6 +20,9 @@ class Command(BaseCommand):
         
         with open(file_path, 'r') as file:
             data = json.load(file)
+
+        total_cards = len(data['data'])
+        progress_bar = tqdm(total=total_cards, desc='Importando cartas', unit='carta', dynamic_ncols=True)
 
         for card_data in data['data']:
             card_sets_data = card_data.pop('card_sets', [])
@@ -29,9 +39,19 @@ class Command(BaseCommand):
             monster_desc = card_data.get('monster_desc', None)
             scale = card_data.get('scale', None)
 
+            # Verificar si la carta ya existe
+            konami_id = card_data['konami_id']
+            if Card.objects.filter(konami_id=konami_id).exists():
+                message = colored(f'La carta "{card_data["name"]}" con konami_id {konami_id} ya existe.', 'yellow')
+                progress_bar.write(message)
+                progress_bar.update(1)
+                continue
+
+            # Crear la carta si no existe
             card, created = Card.objects.get_or_create(
-                name=card_data['name'],
+                konami_id=konami_id,
                 defaults={
+                    'name': card_data['name'],
                     'typeline': card_data.get('typeline', []),
                     'type': card_data.get('type', ''),
                     'humanReadableCardType': card_data.get('humanReadableCardType', ''),
@@ -51,6 +71,9 @@ class Command(BaseCommand):
                     'scale': scale
                 }
             )
+
+            message = colored(f'Carta "{card.name}" con konami_id {konami_id} agregada.', 'green')
+            progress_bar.write(message)
 
             for card_set_data in card_sets_data:
                 try:
@@ -88,4 +111,10 @@ class Command(BaseCommand):
                     coolstuffinc_price=card_price_data['coolstuffinc_price']
                 )
 
-        self.stdout.write(self.style.SUCCESS('Successfully imported cards'))
+            progress_bar.update(1)
+
+        progress_bar.close()
+
+        # Mensaje de éxito parpadeante
+        success_message = colored('Successfully imported cards', 'green', attrs=['blink'])
+        self.stdout.write(success_message)
