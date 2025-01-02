@@ -1,7 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin
+from django.contrib.auth import get_user_model
 from simple_history.models import HistoricalRecords
+import datetime
 
+#User = get_user_model()
 
 class UserManager(BaseUserManager):
     def _create_user(self, username, email, name,last_name, password, is_staff, is_superuser, **extra_fields):
@@ -43,3 +46,14 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return f'{self.name} {self.last_name}'
+
+
+
+class ActiveSession(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    session_token = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.session_token}"
+    
