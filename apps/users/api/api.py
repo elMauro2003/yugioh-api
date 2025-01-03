@@ -106,17 +106,37 @@ class Login(ObtainAuthToken):
         return Response('Just an empty response', status=status.HTTP_204_NO_CONTENT)
 
 
-class LogoutView(APIView):
-    permission_classes = [IsAuthenticated]
-    
+from rest_framework.permissions import AllowAny
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.authtoken.models import Token
+from django.contrib.sessions.models import Session
+from datetime import datetime
+
+class Logout(APIView):
+    permission_classes = [AllowAny]
+
     def get(self, request, *args, **kwargs):
-        user = request.user
         try:
-            active_session = ActiveSession.objects.get(user=user)
-            # Mostrar por consola el nombre del usuario que accedió
-            # print(f"User {user.username} is logging out.")
-            active_session.delete()
-            logout(request)
-            return Response({"detail": "Successfully logged out."}, status=status.HTTP_200_OK)
-        except ActiveSession.DoesNotExist:
-            return Response({"detail": "Active session not found."}, status=status.HTTP_400_BAD_REQUEST)
+            token_key = request.GET.get('token')
+            token = Token.objects.filter(key=token_key).first()
+            
+            if token:
+                user = token.user
+                
+                all_sessions = Session.objects.filter(expire_date__gte=datetime.now())
+                if all_sessions.exists():
+                    for session in all_sessions:
+                        session_data = session.get_decoded()
+                        if user.id == int(session_data.get('_auth_user_id')):
+                            session.delete()
+                token.delete()
+                session_message = 'Sesiones de usuario cerradas'
+                token_message = 'Token eliminado'
+                return Response({'token_message': token_message, 'session_message': session_message}, status=status.HTTP_200_OK)
+
+            return Response({'error': 'No se ha encontrado un usuario con estas credenciales'}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({'error': 'No se ha encontrado token en la petición', 'details': str(e)}, status=status.HTTP_409_CONFLICT)
+            
