@@ -15,7 +15,7 @@ class CardListView(generics.ListAPIView):
 class CardDetailView(generics.RetrieveAPIView):
     queryset = Card.objects.all()
     serializer_class = CardSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [HasAPIKey]
 
 
 class CardCreateView(generics.CreateAPIView):

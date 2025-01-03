@@ -1,14 +1,22 @@
+from rest_framework import generics
+from rest_framework.authtoken.models import Token
+from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.views import APIView
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.models import AnonymousUser
-from django.utils.crypto import get_random_string
-from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_api_key.models import APIKey
-from apps.users.api.serializers import UserSerializer
-from apps.users.models import ActiveSession
 from django.contrib.auth import get_user_model
+
+from django.contrib.sessions.models import Session
+from datetime import datetime
+from rest_framework import status
+from apps.users.api.serializers import UserSerializer
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth import authenticate, login, logout
+from apps.users.api.serializers import UserTokenSerializer
+from apps.users.models import ActiveSession
+from django.utils.crypto import get_random_string
 
 User = get_user_model()
 
@@ -33,6 +41,8 @@ class AssignAPIKeyView(APIView):
         return Response({"api_key": key}, status=status.HTTP_201_CREATED)
 
 
+
+"""
 class LoginView(APIView):
     permission_classes = [AllowAny]
 
@@ -57,6 +67,43 @@ class LoginView(APIView):
             return Response({"message": "Login successful", "session_token": session_token}, status=status.HTTP_200_OK)
         else:
             return Response({"error": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
+"""
+
+
+class Login(ObtainAuthToken):
+    
+    def post(self, request, *args, **kwargs):
+        login_serializer = self.serializer_class(data=request.data, context={'request': request})
+        if login_serializer.is_valid():
+            user = login_serializer.validated_data['user']
+            if user.is_active:
+                token,created = Token.objects.get_or_create(user = user)
+                user_serialized = UserTokenSerializer(user)
+                if created:
+                    return Response({
+                        'token': token.key,
+                        'user': user_serialized.data,
+                        'message': 'Login successful'
+                    }, status=status.HTTP_201_CREATED)
+                else:
+                    all_sessions = Session.objects.filter(expire_date__gte=datetime.now())
+                    if all_sessions.exists():
+                        for session in all_sessions:
+                            session_data = session.get_decoded()
+                            if user.id == int(session_data.get('_auth_user_id')):
+                                session.delete()
+                    token.delete()
+                    token = Token.objects.create(user = user)
+                    return Response({
+                        'token': token.key,
+                        'user': user_serialized.data,
+                        'message': 'Login successful'
+                    }, status=status.HTTP_201_CREATED)
+            else:
+                return Response({'error' : 'Este usuario no puede iniciar sesión'}, status=status.HTTP_401_UNAUTHORIZED)
+        else:
+            return Response({'error' : 'Nombre de usuario o contraseña incorrectos'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response('Just an empty response', status=status.HTTP_204_NO_CONTENT)
 
 
 class LogoutView(APIView):

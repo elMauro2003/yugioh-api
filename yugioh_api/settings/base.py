@@ -28,9 +28,10 @@ LOCAL_APPS = [
 
 THIRD_APPS = [
     'rest_framework',
+    'rest_framework_api_key',
+    'rest_framework.authtoken',
     'simple_history',
     'django_filters',
-    'rest_framework_api_key',
     'django_celery_beat',
 ]
 
@@ -45,7 +46,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'simple_history.middleware.HistoryRequestMiddleware',
-    #'apps.users.middleware.CheckAPIKeyExpirationMiddleware',
+    #'apps.users.middleware.CheckAPIKeyExpirationMiddleware',   
 ]
 
 ROOT_URLCONF = 'yugioh_api.urls'

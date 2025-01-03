@@ -12,7 +12,7 @@ class CheckAPIKeyExpirationMiddleware:
             # Extraer la clave completa después del espacio
             api_key_full = authorization_header.split(" ")[1]
             # Mensaje de depuración
-            print(f"Extracted API Key: {api_key_full}")  
+            # print(f"Extracted API Key: {api_key_full}")  
             
             try:
                 api_key_obj = APIKey.objects.get_from_key(api_key_full)
@@ -23,7 +23,6 @@ class CheckAPIKeyExpirationMiddleware:
                     new_api_key, key = APIKey.objects.create_key(name=api_key_obj.name)
                     # Establecer la fecha de vencimiento a 10 días a partir de ahora
                     new_api_key.expiry_date = now() + timedelta(days=10)
-                    print(new_api_key.expiry_date)
                     new_api_key.save()
                     return JsonResponse({"message": "API Key expired. Here is your new API Key.", "new_api_key": key}, status=401)
             except APIKey.DoesNotExist:

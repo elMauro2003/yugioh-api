@@ -5,6 +5,11 @@ from apps.users.models import ActiveSession
 
 User = get_user_model()
 
+class UserTokenSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'name', 'last_name')
+
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
