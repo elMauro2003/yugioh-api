@@ -13,5 +13,5 @@ app = Celery('yugioh_api')
 #   deben tener un prefijo `CELERY_`.
 app.config_from_object('django.conf:settings', namespace='CELERY')
 
-# Cargar tareas de todos los módulos de aplicaciones registradas de Django.
+# Cargar tareas de todos los módulos de aplicaciones registradas de Django
 app.autodiscover_tasks()
