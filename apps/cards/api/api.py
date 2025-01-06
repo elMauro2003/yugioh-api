@@ -11,6 +11,9 @@ class CardListView(generics.ListAPIView):
     queryset = Card.objects.all()
     serializer_class = CardSerializer
     permission_classes = [AllowAny]
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = CardFilter 
+    
 
 class CardDetailView(generics.RetrieveAPIView):
     queryset = Card.objects.all()
