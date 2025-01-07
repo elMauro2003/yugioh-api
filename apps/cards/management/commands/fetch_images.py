@@ -1,8 +1,6 @@
 import json
 import requests
 import os
-from tkinter import Tk
-from tkinter.filedialog import askopenfilename
 from django.core.management.base import BaseCommand
 from tqdm import tqdm
 
@@ -69,9 +67,6 @@ class Command(BaseCommand):
         # Ruta del archivo JSON
         file_path = os.path.join(os.path.dirname(__file__), '../../../../data.json')
         config_path = os.path.join(os.path.dirname(__file__), 'download_config.json')
-
-        # Ocultar la ventana principal de Tkinter
-        Tk().withdraw()
 
         # Leer configuración de descarga si existe
         if os.path.exists(config_path):
