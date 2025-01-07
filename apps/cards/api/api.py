@@ -18,13 +18,13 @@ class CardListView(generics.ListAPIView):
 class CardDetailView(generics.RetrieveAPIView):
     queryset = Card.objects.all()
     serializer_class = CardSerializer
-    permission_classes = [HasAPIKey]
+    permission_classes = [AllowAny]
 
 
 class CardCreateView(generics.CreateAPIView):
     queryset = Card.objects.all()
     serializer_class = CardSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [HasAPIKey]
 
 class CardUpdateView(generics.UpdateAPIView):
     queryset = Card.objects.all()

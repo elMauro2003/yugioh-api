@@ -130,9 +130,15 @@ development.py
 
 
 # myfiles
-data.json
+# data.json
 fillDataBase1.json
 fillDataBase2.json
 yugioh_api.code-workspace
 api.http
 download_config.json
+wsgi.py
+asgi.py
+local.py
+production.py
+manage.py
+base.py

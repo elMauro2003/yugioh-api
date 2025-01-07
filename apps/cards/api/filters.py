@@ -14,6 +14,7 @@ class CardFilter(django_filters.FilterSet):
     scale = django_filters.NumberFilter()
     linkval = django_filters.NumberFilter()
     linkmarkers = django_filters.CharFilter(lookup_expr='icontains')
+    konami_id = django_filters.CharFilter(lookup_expr='icontains')
     sort = django_filters.OrderingFilter(
         fields=(
             ('atk', 'atk'),
@@ -21,6 +22,7 @@ class CardFilter(django_filters.FilterSet):
             ('name', 'name'),
             ('type', 'type'),
             ('level', 'level'),
+            ('konami_id', 'konami_id')
         )
     )
 
@@ -28,7 +30,7 @@ class CardFilter(django_filters.FilterSet):
         model = Card
         fields = [
             'name', 'type', 'race', 'attribute', 'archetype', 
-            'level', 'atk', 'defense', 'scale', 'linkval', 'linkmarkers'
+            'level', 'atk', 'defense', 'scale', 'linkval', 'linkmarkers', 'konami_id'
         ]
 
     def filter_queryset(self, queryset):
