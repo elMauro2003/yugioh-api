@@ -15,14 +15,16 @@ def descargar_imagenes(json_file, start_index, end_index, tipo_imagen='all'):
     if isinstance(data, dict):
         data = data.get('data', [])  # Ajusta 'data' según la estructura de tu JSON
     
-    # Crear un directorio para guardar las imágenes
-    if not os.path.exists('imagenesMauricio'):
-        os.makedirs('imagenesMauricio')
-    
+    # Verificar y crear directorios si no existen
+    directories = ['media/cards', 'media/cards_small', 'media/cards_cropped']
+    for directory in directories:
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+
     # Inicializar la barra de progreso
     total_images = sum(len(objeto.get('card_images', [])) for objeto in data[start_index:end_index])
     progress_bar = tqdm(total=total_images, desc='Descargando imágenes', unit='imagen', dynamic_ncols=True)
-    
+
     # Iterar sobre los objetos y descargar las imágenes
     for i, objeto in enumerate(data[start_index:end_index]):
         card_images = objeto.get('card_images', [])
@@ -37,12 +39,21 @@ def descargar_imagenes(json_file, start_index, end_index, tipo_imagen='all'):
                     ]
                 else:
                     urls = [(tipo_imagen, image_info.get(tipo_imagen))]
-                
+
                 for tipo, url in urls:
                     if url:
                         response = requests.get(url)
                         if response.status_code == 200:
-                            image_name = f"imagenesMauricio/{i+start_index}_{j}_{tipo}_{os.path.basename(url)}"
+                            if tipo == 'image_url':
+                                directory = 'media/cards'
+                            elif tipo == 'image_url_small':
+                                directory = 'media/cards_small'
+                            elif tipo == 'image_url_cropped':
+                                directory = 'media/cards_cropped'
+                            else:
+                                continue
+
+                            image_name = f"{directory}/{os.path.basename(url)}"
                             with open(image_name, 'wb') as img_file:
                                 img_file.write(response.content)
                             progress_bar.update(1)
@@ -70,8 +81,9 @@ class Command(BaseCommand):
             config = {'last_index': 0}
 
         # Abrir un cuadro de diálogo para seleccionar el archivo JSON
-        json_file = askopenfilename(title="Seleccione el archivo JSON", filetypes=[("JSON files", "*.json")])
-
+        #json_file = askopenfilename(title="Seleccione el archivo JSON", filetypes=[("JSON files", "*.json")])
+        
+        json_file = os.path.join(os.path.dirname(__file__), '../../../../data.json')
         if json_file:
             cantidad = input("Ingrese la cantidad de objetos para descargar imágenes (o presione Enter para todos): ")
             cantidad = int(cantidad) if cantidad.isdigit() else None

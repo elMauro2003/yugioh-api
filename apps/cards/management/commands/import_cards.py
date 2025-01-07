@@ -1,12 +1,14 @@
 import json
 import os
 import requests
+from django.conf import settings
 from django.core.management.base import BaseCommand
 from apps.cards.models import Card, CardSet, CardImage, CardPrice
 from django.db.utils import IntegrityError
 from termcolor import colored
 from colorama import init
 from tqdm import tqdm
+
 
 # Inicializar colorama
 init()
@@ -94,11 +96,28 @@ class Command(BaseCommand):
                 card.card_sets.add(card_set)
 
             for card_image_data in card_images_data:
+                # Suponiendo que 'konami_id' es un atributo del objeto 'card'
+                konami_id = card.konami_id
+
+                # Construir las rutas de los archivos de imagen
+                image_url = f'https://{settings.DOMAIN_URL}/media/cards/{konami_id}.jpg'
+                image_url_small = f'https://{settings.DOMAIN_URL}/media/cards_small/{konami_id}.jpg'
+                image_url_cropped = f'https://{settings.DOMAIN_URL}/media/cards_cropped/{konami_id}.jpg'
+
+                # Verificar si los archivos existen
+                if not os.path.exists(f'./media/cards/{konami_id}.jpg'):
+                    image_url = 'None'
+                if not os.path.exists(f'./media/cards_small/{konami_id}.jpg'):
+                    image_url_small = 'None'
+                if not os.path.exists(f'./media/cards_cropped/{konami_id}.jpg'):
+                    image_url_cropped = 'None'
+
+                # Crear el objeto CardImage con las URLs verificadas
                 CardImage.objects.create(
                     card=card,
-                    image_url=card_image_data['image_url'],
-                    image_url_small=card_image_data['image_url_small'],
-                    image_url_cropped=card_image_data['image_url_cropped']
+                    image_url=image_url,
+                    image_url_small=image_url_small,
+                    image_url_cropped=image_url_cropped
                 )
 
             for card_price_data in card_prices_data:

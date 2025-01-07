@@ -142,3 +142,4 @@ local.py
 production.py
 manage.py
 base.py
+media
