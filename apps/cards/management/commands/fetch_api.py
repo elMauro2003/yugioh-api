@@ -29,7 +29,7 @@ class Command(BaseCommand):
                 cantidad = int(cantidad)
                 data['data'] = data['data'][:cantidad]
             
-            # Nombre del archivo a guardar
+            # Nombre del archivo a guardar.
             fileName = 'data.json'
             
             # Guardar los datos JSON en un archivo local
