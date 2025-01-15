@@ -17,7 +17,7 @@ class Command(BaseCommand):
             # Convertir la respuesta a JSON
             data = response.json()
             
-            # Solicitar al usuario la cantidad de cartas a guardar
+            # Solicitar al usuario la cantidad de cartas a guardar.
             cantidad = input("Ingrese la cantidad de cartas a guardar (o presione Enter para guardar todas): ")
             
             # Procesar cada carta para incluir el ID de Konami
